@@ -1,5 +1,5 @@
+const tabla = document.getElementById('asistencias');
 document.addEventListener('DOMContentLoaded', (event) => {
-    const tabla = document.getElementById('asistencias');
 
     if (tabla) {
         function getData() {
@@ -51,7 +51,7 @@ const buttonTarde = document.getElementById('tarde');
 
 if (buttonPuntual) {
     buttonPuntual.addEventListener('click', () => {
-        const randomData = generateRandomData('puntual'); // Generar un dato aleatorio con estado puntual
+        const randomData = generateRandomData('presente'); // Generar un dato aleatorio con estado puntual
         fetch('http://localhost:3000/add', {
             method: 'POST',
             headers: {
@@ -81,7 +81,7 @@ if (buttonPuntual) {
 
 if (buttonTarde) {
     buttonTarde.addEventListener('click', () => {
-        const randomData = generateRandomData('tarde'); // Generar un dato aleatorio con estado tarde
+        const randomData = generateRandomData('atraso'); // Generar un dato aleatorio con estado tarde
         fetch('http://localhost:3000/add', {
             method: 'POST',
             headers: {
@@ -139,4 +139,39 @@ function generateRandomTime(start, end) {
     const endTime = new Date(`1970-01-01T${end}Z`).getTime();
     const randomTime = new Date(startTime + Math.random() * (endTime - startTime));
     return randomTime.toISOString().substr(11, 8);
+}
+
+const searchInput = document.getElementById('search');
+
+if (searchInput) {
+    let searchValue = '';
+
+    searchInput.addEventListener('input', () => {
+        searchValue = searchInput.value.trim().toLowerCase();
+        updateTable();
+    });
+
+    function updateTable() {
+        const rows = tabla.getElementsByTagName('tr');
+
+        for (let i = 0; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName('td');
+            let found = false;
+
+            for (let j = 0; j < cells.length; j++) {
+                const cellValue = cells[j].textContent.toLowerCase();
+
+                if (cellValue.includes(searchValue)) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found) {
+                rows[i].style.display = '';
+            } else {
+                rows[i].style.display = 'none';
+            }
+        }
+    }
 }
