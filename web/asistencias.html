@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <title>Asistencias</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="static/css/asistencias.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#navbar-placeholder").load("navbar.html", function (response, status, xhr) {
+                if (status == "error") {
+                    var msg = "There was an error: ";
+                    $("#navbar-placeholder").html(msg + xhr.status + " " + xhr.statusText);
+                }
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div id="navbar-placeholder"></div>
+    <div class="container">
+        <div class="search-bar">
+            <input type="text" id="search" placeholder="Buscar estudiante...">
+        </div>
+        <div class="actions-container">
+            <button id="btn-presentes" class="btn">Presentes</button>
+            <button id="btn-tarde" class="btn">Tarde</button>
+            <button id="btn-ausentes" class="btn">Ausentes</button>
+        </div>
+    </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Carnet</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Hora de llegada</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody id="asistencias">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>
