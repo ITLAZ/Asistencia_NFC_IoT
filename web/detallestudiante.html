@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Detalle de Asistencia</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="static/css/detallestudiante.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!--<script src="scripts/grafestudiantes.js"></script>-->
+    <script>
+        $(document).ready(function () {
+            $("#navbar-placeholder").load("navbar.html", function (response, status, xhr) {
+                if (status == "error") {
+                    var msg = "Hubo un error: ";
+                    $("#navbar-placeholder").html(msg + xhr.status + " " + xhr.statusText);
+                }
+            });
+
+            function obtenerParametroUrl(parametro) {
+                var urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(parametro);
+            }
+
+            var id_estudiante = obtenerParametroUrl('id_estudiante');
+            var id_materia = obtenerParametroUrl('id_materia');
+
+            $.getJSON('/estudiantes/' + id_materia, function (estudiantes) {
+                cargarDatosMateria(estudiantes);
+            });
+
+            $.getJSON('/estudiante/' + id_estudiante + '/est/' + id_materia, function (estudiante) {
+                cargarDatosEstudiante(estudiante[0]);
+            });
+
+            $.getJSON('/estudiante/' + id_estudiante + '/asistencias-faltas-retrasos/' + id_materia, function (asistencias) {
+                cargarDatosAsistencia(asistencias);
+                generarGraficoEstadisticas(asistencias); 
+            });
+
+            function cargarDatosEstudiante(estudiante) {
+                $('.asistencias-datos-estudiante').html(`
+                    <p><strong>Nombre:</strong> ${estudiante.nombre} ${estudiante.apellido}</p>
+                    <p><strong>Carrera:</strong> ${estudiante.carrera}</p>
+                    <p><strong>C.I:</strong> ${estudiante.ci}</p>
+                    <p><strong>Correo Electrónico:</strong> ${estudiante.correo}</p>
+                `);
+            }
+
+            function cargarDatosMateria(estudiantes) {
+                $('.asistencias-datos-materia').html(`
+                    <h2>(${estudiantes[0].sigla} - ${estudiantes[0].paralelo}) ${estudiantes[0].asignatura}</h2>
+                `);
+            }
+
+            function cargarDatosAsistencia(asistencias) {
+                let totalAsistencias = 0;
+                let totalFaltas = 0;
+                let totalRetrasos = 0;
+
+                asistencias.forEach(a => {
+                    if (a.estado === 'Presente') totalAsistencias++;
+                    if (a.estado === 'Ausente') totalFaltas++;
+                    if (a.estado === 'Tarde') totalRetrasos++;
+                });
+
+                $('.resumen-asistencia').html(`
+                    <div class="cuadro-resumen">
+                        <h3>Asistencias</h3>
+                        <p>${totalAsistencias}</p>
+                    </div>
+                    <div class="cuadro-resumen">
+                        <h3>Faltas</h3>
+                        <p>${totalFaltas}</p>
+                    </div>
+                    <div class="cuadro-resumen">
+                        <h3>Retrasos</h3>
+                        <p>${totalRetrasos}</p>
+                    </div>
+                `);
+            }
+
+            $('#filtro-asistencia').change(function () {
+                var filtro = $(this).val();
+                var url = '/estudiante/' + id_estudiante + '/' + filtro + '/' + id_materia;
+
+                if (filtro === 'todos') {
+                    url = '/estudiante/' + id_estudiante + '/asistencias-faltas-retrasos/' + id_materia;
+                }
+
+                $.getJSON(url, function (asistencias) {
+                    actualizarTablaAsistencia(asistencias);
+                    generarGraficoEstadisticas(asistencias); 
+                });
+            });
+
+            function actualizarTablaAsistencia(asistencias) {
+                var tbody = $('.asistencias-tabla-asistencia tbody');
+                tbody.empty();
+
+                asistencias.forEach(a => {
+                    tbody.append(`
+                        <tr>
+                            <td>${formatearFecha(a.fecha)}</td>
+                            <td>${a.entrada}</td>
+                            <td>${a.salida}</td>
+                            <td>${a.estado}</td>
+                        </tr>
+                    `);
+                });
+            }
+
+        });
+    </script>
+</head>
+<body>
+    <div id="navbar-placeholder"></div>
+
+    <div class="asistencias-datos-materia"></div>
+    <div class="asistencias-datos-estudiante"></div>
+
+    <h2>Asistencia del Estudiante</h2>
+    <div class="resumen-asistencia">
+        <!-- Cuadros resumen de asistencia, faltas y retrasos -->
+    </div>
+    <div>
+        <label for="filtro-asistencia">Filtrar por: </label>
+        <select id="filtro-asistencia">
+            <option value="todos">Todos</option>
+            <option value="asistencias">Presente</option>
+            <option value="retrasos">Tarde</option>
+            <option value="faltas">Ausente</option>
+        </select>
+    </div>
+    
+    <table class="asistencias-tabla-asistencia">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Entrada</th>
+                <th>Salida</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <h2>Estadísticas de Asistencia</h2>
+    <canvas id="graficoEstadisticas"></canvas>
+</body>
+</html>
+

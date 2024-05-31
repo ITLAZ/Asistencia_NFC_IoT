@@ -1,0 +1,39 @@
+/* lista-estudiantes.css */
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.estudiantes-lista {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.estudiante {
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: calc(50% - 20px);
+    box-sizing: border-box;
+}
+
+.estudiante h2 {
+    margin-bottom: 10px;
+}
+
+.estudiante .ver-detalle {
+    display: block;
+    margin-top: 10px;
+    text-align: center;
+    text-decoration: none;
+    background-color: #007bff;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.estudiante .ver-detalle:hover {
+    background-color: #0056b3;
+}

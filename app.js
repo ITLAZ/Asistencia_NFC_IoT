@@ -2,6 +2,7 @@ var mysql = require('mysql');
 var express = require('express');
 var cors = require('cors');
 var path = require('path');
+const estfunc = require('./web/scripts/estudiantedb')
 
 var app = express();
 
@@ -52,6 +53,92 @@ app.post('/add', function(req, res) {
         res.json(result);
     });
 });
+
+
+// Ruta para obtener estudiantes por materia
+app.get('/estudiantes/:materiaId', (req, res) => {
+    const materiaId = req.params.materiaId;
+
+    estfunc.getEstudiantesByMateria(materiaId, (err, results) => {
+        if (err) {
+            res.status(500).json({ error: 'Error fetching students, ola' });
+            return;
+        }
+        res.json(results);
+    });
+});
+
+// Ruta para obtener estudiante en especifico
+app.get('/estudiante/:estudianteId/est/:materiaId', (req, res) => {
+    const estudianteId = req.params.estudianteId;
+    const materiaId = req.params.materiaId;
+
+    estfunc.getEstudiante(estudianteId, materiaId, (err, results) => {
+        if (err) {
+            res.status(500).json({ error: 'Error fetching students, ola' });
+            return;
+        }
+        res.json(results);
+    });
+});
+
+
+// Ruta para obtener asistencias, faltas y retrasos de un estudiante en una materia
+app.get('/estudiante/:estudianteId/asistencias-faltas-retrasos/:materiaId', (req, res) => {
+    const estudianteId = req.params.estudianteId;
+    const materiaId = req.params.materiaId;
+
+    estfunc.getAsistenciasFaltasRetrasos(estudianteId, materiaId, (err, results) => {
+        if (err) {
+            res.status(500).json({ error: 'Error fetching attendance, absences, and delays' });
+            return;
+        }
+        res.json(results);
+    });
+});
+
+
+app.get('/estudiante/:estudianteId/asistencias/:materiaId', (req, res) => {
+    const estudianteId = req.params.estudianteId;
+    const materiaId = req.params.materiaId;
+
+    estfunc.getAsistencias(estudianteId, materiaId, (err, results) => {
+        if (err) {
+            res.status(500).json({ error: 'Error fetching attendance' });
+            return;
+        }
+        res.json(results);
+    });
+});
+
+app.get('/estudiante/:estudianteId/retrasos/:materiaId', (req, res) => {
+    const estudianteId = req.params.estudianteId;
+    const materiaId = req.params.materiaId;
+
+    estfunc.getRetrasos(estudianteId, materiaId, (err, results) => {
+        if (err) {
+            res.status(500).json({ error: 'Error fetching delays' });
+            return;
+        }
+        res.json(results);
+    });
+});
+
+
+app.get('/estudiante/:estudianteId/faltas/:materiaId', (req, res) => {
+    const estudianteId = req.params.estudianteId;
+    const materiaId = req.params.materiaId;
+
+    estfunc.getFaltas(estudianteId, materiaId, (err, results) => {
+        if (err) {
+            res.status(500).json({ error: 'Error fetching absences' });
+            return;
+        }
+        res.json(results);
+    });
+});
+
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, function() {
