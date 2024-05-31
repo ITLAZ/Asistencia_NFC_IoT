@@ -24,12 +24,12 @@ body {
 
     select, input {
         padding: 10px;
-        border: 1px solid #ccc;
+        border: 2px solid #044040;
         border-radius: 20px;
         outline: none;
 
         &:focus {
-            border: 1px solid #007bff;
+            border: 1px solid #044040;
         }
     }
 }
@@ -49,7 +49,15 @@ table{
 }
 
 th, td{
-    border: 1px solid #ccc;
+    border: 1px solid #044040;
     padding: 10px;
 }
 
+th{
+    background-color: #044040;
+    color: #f2f2f2;
+}
+
+td{
+    background-color: #f2f2f2;
+}

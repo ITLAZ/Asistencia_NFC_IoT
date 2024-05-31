@@ -28,12 +28,16 @@
     margin-top: 10px;
     text-align: center;
     text-decoration: none;
-    background-color: #007bff;
+    background-color: #044040;
     color: #f2f2f2;
     padding: 5px 10px;
     border-radius: 5px;
+    transition: all 0.3s ease-in-out;
 }
 
 .estudiante .ver-detalle:hover {
-    background-color: #0056b3;
+    background-color: #f2f2f2;
+    color: #044040;
+    border: #044040 2px solid;
+    padding: 3px 10px;
 }
