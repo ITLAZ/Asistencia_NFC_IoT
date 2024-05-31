@@ -59,9 +59,9 @@
                 let totalRetrasos = 0;
 
                 asistencias.forEach(a => {
-                    if (a.estado === 'Presente') totalAsistencias++;
-                    if (a.estado === 'Ausente') totalFaltas++;
-                    if (a.estado === 'Tarde') totalRetrasos++;
+                    if (a.estado === 'presente') totalAsistencias++;
+                    if (a.estado === 'ausente') totalFaltas++;
+                    if (a.estado === 'atraso') totalRetrasos++;
                 });
 
                 $('.resumen-asistencia').html(`
@@ -84,8 +84,16 @@
                 var filtro = $(this).val();
                 var url = '/estudiante/' + id_estudiante + '/' + filtro + '/' + id_materia;
 
-                if (filtro === 'todos') {
-                    url = '/estudiante/' + id_estudiante + '/asistencias-faltas-retrasos/' + id_materia;
+                if (filtro === 'presente') {
+                    url = '/estudiante/' + id_estudiante + '/asistencias/' + id_materia;
+                }
+
+                else if (filtro === 'atraso') {
+                    url = '/estudiante/' + id_estudiante + '/retrasos/' + id_materia;
+                }
+
+                else if (filtro === 'ausente') {
+                    url = '/estudiante/' + id_estudiante + '/faltas/' + id_materia;
                 }
 
                 $.getJSON(url, function (asistencias) {
@@ -125,10 +133,9 @@
     <div>
         <label style="padding-left: 40px;" for="filtro-asistencia">Filtrar por: </label>
         <select id="filtro-asistencia">
-            <option value="todos">Todos</option>
-            <option value="asistencias">Presente</option>
-            <option value="retrasos">Tarde</option>
-            <option value="faltas">Ausente</option>
+            <option value="presente">Presente</option>
+            <option value="atraso">Tarde</option>
+            <option value="ausente">Ausente</option>
         </select>
     </div>
     
