@@ -14,9 +14,9 @@ function generarGraficoEstadisticas(asistencias) {
 
     asistencias.forEach(a => {
         fechas.push(formatearFecha(a.fecha));
-        presentes.push(a.estado === 'Presente' ? 1 : 0);
-        ausentes.push(a.estado === 'Ausente' ? 1 : 0);
-        retrasos.push(a.estado === 'Tarde' ? 1 : 0);
+        presentes.push(a.estado === 'presente' ? 1 : 0);
+        ausentes.push(a.estado === 'ausente' ? 1 : 0);
+        retrasos.push(a.estado === 'atraso' ? 1 : 0);
     });
 
     var ctxLine = document.getElementById('graficoEstadisticasLine').getContext('2d');

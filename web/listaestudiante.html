@@ -10,18 +10,53 @@
         $(document).ready(function () {
             $("#navbar-placeholder").load("navbar.html");
 
-            $.getJSON('/estudiantes/1', function (data) { 
-                data.forEach(function (estudiante) {
-                    var html = '<div class="estudiante">';
-                    html += '<h2>' + estudiante.nombre + ' ' + estudiante.apellido + '</h2>';
-                    html += '<p>Carrera: ' + estudiante.carrera + '</p>';
-                    html += '<p>C.I: ' + estudiante.ci + '</p>';
-                    html += '<p>Correo Electrónico: ' + estudiante.correo + '</p>';
-                    html += '<a href="detallestudiante.html?id_estudiante=' + estudiante.id_persona + '&id_materia=' + estudiante.id_materia + '" class="ver-detalle">Ver Detalle</a>';
-                    html += '</div>';
-                    $('.estudiantes-lista').append(html);
-                });
+            fetchMaterias();
+
+            $("#materia").change(function () {
+                var id_materia = $(this).val();
+                if (id_materia) {
+                    cargarEstudiantes(id_materia);
+                }
             });
+
+            function cargarEstudiantes(id_materia) {
+                $.getJSON('/estudiantes/' + id_materia, function (data) { 
+                    $('.estudiantes-lista').empty();
+                    data.forEach(function (estudiante) {
+                        var html = '<div class="estudiante">';
+                        html += '<h2>' + estudiante.nombre + ' ' + estudiante.apellido + '</h2>';
+                        html += '<p>Carrera: ' + estudiante.carrera + '</p>';
+                        html += '<p>C.I: ' + estudiante.ci + '</p>';
+                        html += '<p>Correo Electrónico: ' + estudiante.correo + '</p>';
+                        html += '<a href="detallestudiante.html?id_estudiante=' + estudiante.id_persona + '&id_materia=' + estudiante.id_materia + '" class="ver-detalle">Ver Detalle</a>';
+                        html += '</div>';
+                        $('.estudiantes-lista').append(html);
+                    });
+                });
+            }
+
+            function fetchMaterias() {
+                $.ajax({
+                    url: '/materias',
+                    method: 'GET',
+                    success: function (data) {
+                        data.forEach(materia => {
+                            const option = document.createElement('option');
+                            option.value = materia.id_materia;
+                            option.text = materia.asignatura;
+                            $('#materia').append(option);
+                        });
+
+                        // Seleccionar la primera materia por defecto y cargar estudiantes
+                        if (data.length > 0) {
+                            $('#materia').val(data[0].id_materia).change();
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.error('Error fetching materias:', textStatus, errorThrown);
+                    }
+                });
+            }
         });
     </script>
 </head>
@@ -29,8 +64,12 @@
     <div id="navbar-placeholder"></div>
 
     <div class="container">
+        <div class="filter">
+            <select id="materia">
+                <option value="">Seleccione una materia</option>
+            </select>
+        </div>
         <h1>Lista de Estudiantes</h1>
-
         <div class="estudiantes-lista">
             <!-- Aquí se agregarán dinámicamente los estudiantes -->
         </div>

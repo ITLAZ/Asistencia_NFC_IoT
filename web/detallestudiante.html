@@ -25,18 +25,22 @@
             var id_estudiante = obtenerParametroUrl('id_estudiante');
             var id_materia = obtenerParametroUrl('id_materia');
 
-            $.getJSON('/estudiantes/' + id_materia, function (estudiantes) {
-                cargarDatosMateria(estudiantes);
-            });
+            cargarDatos(id_estudiante, id_materia);
 
-            $.getJSON('/estudiante/' + id_estudiante + '/est/' + id_materia, function (estudiante) {
-                cargarDatosEstudiante(estudiante[0]);
-            });
+            function cargarDatos(id_estudiante, id_materia) {
+                $.getJSON('/estudiantes/' + id_materia, function (estudiantes) {
+                    cargarDatosMateria(estudiantes);
+                });
 
-            $.getJSON('/estudiante/' + id_estudiante + '/asistencias-faltas-retrasos/' + id_materia, function (asistencias) {
-                cargarDatosAsistencia(asistencias);
-                generarGraficoEstadisticas(asistencias); 
-            });
+                $.getJSON('/estudiante/' + id_estudiante + '/est/' + id_materia, function (estudiante) {
+                    cargarDatosEstudiante(estudiante[0]);
+                });
+
+                $.getJSON('/estudiante/' + id_estudiante + '/asistencias-faltas-retrasos/' + id_materia, function (asistencias) {
+                    cargarDatosAsistencia(asistencias);
+                    generarGraficoEstadisticas(asistencias);
+                });
+            }
 
             function cargarDatosEstudiante(estudiante) {
                 $('.asistencias-datos-estudiante').html(`
@@ -98,7 +102,7 @@
 
                 $.getJSON(url, function (asistencias) {
                     actualizarTablaAsistencia(asistencias);
-                    generarGraficoEstadisticas(asistencias); 
+                    generarGraficoEstadisticas(asistencias);
                 });
             });
 
@@ -118,18 +122,22 @@
                 });
             }
 
+            function formatearFecha(fecha) {
+                var date = new Date(fecha);
+                var year = date.getFullYear();
+                var month = ('0' + (date.getMonth() + 1)).slice(-2);
+                var day = ('0' + date.getDate()).slice(-2);
+                return `${year}-${month}-${day}`;
+            }
         });
     </script>
 </head>
 <body>
     <div id="navbar-placeholder"></div>
-
-    <div class="asistencias-datos-materia"></div>
     <div class="asistencias-datos-estudiante"></div>
 
     <h2 style="padding-left: 40px; font-size: 30px;">ASISTENCIA DEL ESTUDIANTE</h2>
-    <div class="resumen-asistencia">
-    </div>
+    <div class="resumen-asistencia"></div>
     <div>
         <label style="padding-left: 40px;" for="filtro-asistencia">Filtrar por: </label>
         <select id="filtro-asistencia">
@@ -172,4 +180,3 @@
     </div>
 </body>
 </html>
-

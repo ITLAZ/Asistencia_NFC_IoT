@@ -41,3 +41,21 @@
     border: #044040 2px solid;
     padding: 3px 10px;
 }
+
+.filter {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 10px;
+    padding: 10px;
+
+    select, input {
+        padding: 10px;
+        border: 2px solid #044040;
+        border-radius: 20px;
+        outline: none;
+
+        &:focus {
+            border: 1px solid #044040;
+        }
+    }
+}
