@@ -22,7 +22,7 @@ app.use(cors());
 
 var connection = mysql.createConnection({
     host: 'localhost',
-    database: 'asistencia_mockup',
+    database: 'db_nfc',
     user: 'root',
     password: ''
 });
@@ -39,21 +39,69 @@ app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname, 'web/index.html'));
 });
 
-app.get('/all', function(req, res) {
-    connection.query('SELECT * FROM asistencia', function(err, rows, fields) {
-        if (err) throw err;
-        res.json(rows);
+app.get('/asistencias/:materiaId/:fecha', (req, res) => {
+    const materiaId = req.params.materiaId;
+    const fecha = req.params.fecha; // Fecha específica en el formato 'YYYY-MM-DD'
+
+    const query = `
+        SELECT p.ci, p.nombre, p.apellido, p.correo, a.fecha, a.entrada, a.salida, a.estado
+        FROM Asistencia a
+        JOIN Persona p ON a.Persona_id_persona = p.id_persona
+        JOIN Clase c ON a.Clase_id_clase = c.id_clase
+        WHERE c.Materia_id_materia = ? AND a.fecha = ?
+    `;
+
+    connection.query(query, [materiaId, fecha], (err, results) => {
+        if (err) {
+            console.error('Error fetching attendance:', err);
+            res.status(500).json({ error: 'Error fetching attendance' });
+            return;
+        }
+        res.json(results);
     });
 });
 
-app.post('/add', function(req, res) {
-    let datos = req.body;
-    connection.query('INSERT INTO asistencia SET ?', datos, function(err, result) {
-        if (err) throw err;
-        res.json(result);
+// Ruta para obtener asistencias de todos los estudiantes en una materia específica en una fecha específica, con opción de filtrar por estado
+app.get('/asistencias/:materiaId/:fecha/:estado?', (req, res) => {
+    const { materiaId, fecha, estado } = req.params;
+
+    let query = `
+        SELECT p.ci, p.nombre, p.apellido, p.correo, a.entrada, a.salida, a.estado
+        FROM Asistencia a
+        JOIN Persona p ON a.Persona_id_persona = p.id_persona
+        JOIN Clase c ON a.Clase_id_clase = c.id_clase
+        WHERE c.Materia_id_materia = ? AND a.fecha = ?`;
+
+    let queryParams = [materiaId, fecha];
+
+    if (estado) {
+        query += ' AND a.estado = ?';
+        queryParams.push(estado);
+    }
+
+    connection.query(query, queryParams, (err, results) => {
+        if (err) {
+            console.error('Error fetching asistencias:', err);
+            res.status(500).json({ error: 'Error fetching asistencias' });
+            return;
+        }
+        res.json(results);
     });
 });
 
+
+app.get('/materias', (req, res) => {
+    const query = 'SELECT id_materia, asignatura FROM Materia';
+    
+    connection.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching materias:', err);
+            res.status(500).json({ error: 'Error fetching materias' });
+            return;
+        }
+        res.json(results);
+    });
+});
 
 // Ruta para obtener estudiantes por materia
 app.get('/estudiantes/:materiaId', (req, res) => {

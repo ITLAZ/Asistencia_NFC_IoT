@@ -16,20 +16,21 @@
                 }
             });
         });
+
+        $(document).ready(function () {
+            $("#footer-placeholder").load("footer.html", function (response, status, xhr) {
+                if (status == "error") {
+                    var msg = "There was an error: ";
+                    $("#footer-placeholder").html(msg + xhr.status + " " + xhr.statusText);
+                }
+            });
+        });
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 
 <body>
     <div id="navbar-placeholder"></div>
-    <div class="date-time">
-        <div class="date">
-            <span id="date">fecha</span>
-        </div>
-        <div class="time">
-            <span id="time">hora</span>
-        </div>
-    </div>
     <div class="container">
         <div class="options-panel">
             <div class="option">
@@ -50,31 +51,10 @@
                 </a>
                 <span>Reporte de la Materia</span>
             </div>
-            <div class="option">
-                <a href="horarios.html">
-                    <i class="fas fa-clock"></i>
-                </a>
-                <span>Horarios</span>
-            </div>
-        </div>
-        <div class="registered-user">
-            <div class="user-welcome">
-                <h3>Bienvenido Nombre_Docente:</h3>
-            </div>
-            <div class="user-profile">
-                <div class="user-icon">
-                    <i class="fas fa-user-circle"></i>
-                </div>
-                <div class="user-info">
-                    <span>Docente: Nombre_Docente</span>
-                <span>Materia: Nombre_Materia</span>
-                <span>Paralelo: Nro_Paralelo</span>
-                <span>Semestre: Semestre_Gestion</span>
-                </div>
-            </div>
         </div>
     </div>
-    <script src="scripts/index.js"></script>
 </body>
-
+<footer>
+    <div id="footer-placeholder"></div>
+</footer>
 </html>

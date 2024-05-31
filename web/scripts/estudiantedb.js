@@ -3,7 +3,7 @@ const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'asistencia_mockup'
+    database: 'db_nfc'
 });
 
 connection.connect();

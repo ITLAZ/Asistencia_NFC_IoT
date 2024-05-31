@@ -10,6 +10,8 @@ html, body{
     padding: 0;
     height: 100%;
     background-color: #f2f2f2;
+    justify-content: center;
+    align-items: center;
 }
 
 .nav-bar-placeholder{
@@ -24,19 +26,23 @@ html, body{
 }
 
 .container{
-    display: grid;
-    grid-template-columns: 2fr 1fr;
+    display: flex;
     padding: 20px;
     flex-direction: column;
     align-items: center;
 }
 
 .options-panel{
+    width: 100%;
+    height: 100%;
     display: grid;
+    justify-content: center;
     grid-template-columns: repeat(3, 1fr);
     align-items: center;
-    padding: 20px;
+    padding: 100px;
     gap: 20px;
+    background-color: #92DBD8;
+    border-radius: 30px;
 }
 
 .option{
@@ -48,50 +54,26 @@ html, body{
 
     a{
         text-decoration: none;
-        color: #000;
-        background-color: cadetblue;
-        padding: 30px;
+        color: #f2f2f2;
+        background-color: #044040;
+        padding: 50px;
+        transition: all 0.3s ease-in-out;
         border-radius: 20px;
         i{
-            font-size: 25px;
+            font-size: 40px;
         }
+    }
+
+    a:hover{
+        background-color: #f2f2f2;
+        padding: 40px;
+        color: #044040;
+        border: #044040 2px solid;
     }
 
     span{
         font-weight: bold;
         margin-top: 10px;
     }
-}
 
-.registered-user{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    gap: 10px;
-    background-color: cadetblue;
-    border-radius: 20px;
-
-    .user-profile{
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        justify-content: center;
-        text-align: center;
-
-        .user-icon{
-            font-size: 150px;
-        }
-
-        .user-info{
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            justify-content: center;
-
-            span{
-                font-weight: bold;
-            }
-        }
-    }
 }

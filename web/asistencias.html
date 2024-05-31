@@ -1,45 +1,52 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="utf-8">
     <title>Asistencias</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="static/css/asistencias.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function () {
-            $("#navbar-placeholder").load("navbar.html", function (response, status, xhr) {
-                if (status == "error") {
-                    var msg = "There was an error: ";
-                    $("#navbar-placeholder").html(msg + xhr.status + " " + xhr.statusText);
-                }
-            });
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('navbar.html')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    document.getElementById('navbar-placeholder').innerHTML = data;
+                })
+                .catch(error => {
+                    document.getElementById('navbar-placeholder').innerHTML = 'There was an error: ' + error.message;
+                });
         });
     </script>
 </head>
-
 <body>
     <div id="navbar-placeholder"></div>
     <div class="container">
-        <div class="search-bar">
-            <input type="text" id="search" placeholder="Buscar estudiante...">
+        <div class="filter">
+            <select id="materia">
+                <option value="">Seleccione una materia</option>
+            </select>
+            <input type="date" id="fecha" value="2024-05-27">
+            <select id="estado">
+                <option value="">Seleccione un estado</option>
+                <option value="Presente">Presente</option>
+                <option value="Ausente">Ausente</option>
+                <option value="Atraso">Atraso</option>
+            </select>
         </div>
-        <div class="actions-container">
-            <button id="btn-presentes" class="btn">Presentes</button>
-            <button id="btn-tarde" class="btn">Tarde</button>
-            <button id="btn-ausentes" class="btn">Ausentes</button>
-        </div>
-    </div>
         <div class="table-container">
             <table>
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Carnet</th>
-                        <th>Nombre</th>
-                        <th>Apellido</th>
-                        <th>Hora de llegada</th>
+                        <th>Estudiante</th>
+                        <th>Correo</th>
+                        <th>Entrada</th>
+                        <th>Salida</th>
                         <th>Estado</th>
                     </tr>
                 </thead>
@@ -48,6 +55,6 @@
             </table>
         </div>
     </div>
+    <script src="scripts/asistencias.js"></script>
 </body>
-
 </html>

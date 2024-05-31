@@ -10,22 +10,23 @@
   .nav {
     height: 100%;
     width: 100%;
-    background-color: #4d4d4d;
+    background-color: #591C21;
     position: relative;
     padding: 10px;
   }
   
   .nav > .nav-header {
     display: inline;
-    color: #fff;
+    color: #f2f2f2;
   }
   
   .nav > .nav-header > .nav-title {
     display: inline-block;
     font-size: 22px;
-    color: #fff;
-    background-color: #4d4d4d;
+    color: #f2f2f2;
+    background-color: #591C21;
     padding: 20px;
+    transition: all 0.3s ease-in;
   }
   
   .nav > .nav-btn {
@@ -35,7 +36,7 @@
   .nav > .nav-links {
     display: inline-block;
     font-size: 18px;
-    background-color: #4d4d4d;
+    background-color: #591C21;
   }
   
   .nav > .nav-links > a {
@@ -43,10 +44,12 @@
     padding: 13px 10px 13px 10px;
     text-decoration: none;
     color: #efefef;
+    transition: all 0.3s ease-in;
   }
   
   .nav > .nav-links > a:hover {
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: #8C1F28;
+    border-radius: 20px;
   }
   
   .nav > #nav-check {
@@ -67,7 +70,8 @@
       padding: 13px;
     }
     .nav > .nav-btn > label:hover,.nav  #nav-check:checked ~ .nav-btn > label {
-      background-color: rgba(0, 0, 0, 0.3);
+      background-color: #8C1F28;
+      border-radius: 20px;
     }
     .nav > .nav-btn > label > span {
       display: block;
@@ -79,9 +83,8 @@
       position: absolute;
       display: block;
       width: 100%;
-      background-color: #333;
+      background-color: #591C21;
       height: 0px;
-      transition: all 0.3s ease-in;
       overflow-y: hidden;
       top: 50px;
       left: 0px;
