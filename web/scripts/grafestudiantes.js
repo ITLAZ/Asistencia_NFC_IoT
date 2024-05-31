@@ -19,8 +19,8 @@ function generarGraficoEstadisticas(asistencias) {
         retrasos.push(a.estado === 'Tarde' ? 1 : 0);
     });
 
-    var ctx = document.getElementById('graficoEstadisticas').getContext('2d');
-    new Chart(ctx, {
+    var ctxLine = document.getElementById('graficoEstadisticasLine').getContext('2d');
+    new Chart(ctxLine, {
         type: 'line',
         data: {
             labels: fechas,
@@ -28,19 +28,19 @@ function generarGraficoEstadisticas(asistencias) {
                 {
                     label: 'Presentes',
                     data: presentes,
-                    borderColor: 'green',
+                    borderColor: '#6ebd99',
                     fill: false
                 },
                 {
                     label: 'Ausentes',
                     data: ausentes,
-                    borderColor: 'red',
+                    borderColor: '#ee746e',
                     fill: false
                 },
                 {
                     label: 'Retrasos',
                     data: retrasos,
-                    borderColor: 'orange',
+                    borderColor: '#ddaf6f',
                     fill: false
                 }
             ]
@@ -53,6 +53,68 @@ function generarGraficoEstadisticas(asistencias) {
                     labels: fechas
                 }
             }
+        }
+    });
+
+    var totalAsistencias = presentes.reduce((a, b) => a + b, 0);
+    var totalAusentes = ausentes.reduce((a, b) => a + b, 0);
+    var totalRetrasos = retrasos.reduce((a, b) => a + b, 0);
+
+    var ctxBar = document.getElementById('graficoEstadisticasBar').getContext('2d');
+    new Chart(ctxBar, {
+        type: 'bar',
+        data: {
+            labels: ['Presentes', 'Ausentes', 'Retrasos'],
+            datasets: [{
+                label: 'Totales',
+                data: [totalAsistencias, totalAusentes, totalRetrasos],
+                backgroundColor: ['#92DBD8', '#92DBD8', '#92DBD8']
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    var ctxPie = document.getElementById('graficoEstadisticasPie').getContext('2d');
+    new Chart(ctxPie, {
+        type: 'pie',
+        data: {
+            labels: ['Presentes', 'Ausentes', 'Retrasos'],
+            datasets: [{
+                label: 'Distribución',
+                data: [totalAsistencias, totalAusentes, totalRetrasos],
+                backgroundColor: ['#6ebd99', '#ee746e', '#ddaf6f']
+            }]
+        },
+        options: {
+            responsive: true
+        }
+    });
+
+    var ctxRadar = document.getElementById('graficoEstadisticasRadar').getContext('2d');
+    new Chart(ctxRadar, {
+        type: 'radar',
+        data: {
+            labels: ['Presentes', 'Ausentes', 'Retrasos'],
+            datasets: [{
+                label: 'Totales',
+                data: [totalAsistencias, totalAusentes, totalRetrasos],
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgba(255, 99, 132, 1)'
+            }]
+        },
+        options: {
+            responsive: true
         }
     });
 }
