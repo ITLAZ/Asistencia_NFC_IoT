@@ -180,6 +180,105 @@ function getRetrasos(estudianteId, materiaId, callback) {
     });
 }
 
+function getAsistenciasPorEstudiante(materiaId, callback) {
+    const query = `
+    SELECT p.nombre, p.apellido, COUNT(a.id_asistencia) AS asistencias
+    FROM Persona p
+    JOIN Asistencia a ON p.id_persona = a.Persona_id_persona
+    JOIN Clase c ON a.Clase_id_clase = c.id_clase
+    WHERE c.Materia_id_materia = ?
+    GROUP BY p.nombre, p.apellido;
+    `;
+
+    connection.query(query, [materiaId], (error, results) => {
+        if (error) {
+            callback(error, null);
+        } else {
+            callback(null, results);
+        }
+    });
+}
+
+
+function getTendenciaAsistencia(materiaId, callback) {
+    const query = `
+    SELECT a.fecha, COUNT(a.id_asistencia) AS asistencias
+    FROM Asistencia a
+    JOIN Clase c ON a.Clase_id_clase = c.id_clase
+    WHERE c.Materia_id_materia = ?
+    GROUP BY a.fecha
+    ORDER BY a.fecha;
+    `;
+
+    connection.query(query, [materiaId], (error, results) => {
+        if (error) {
+            callback(error, null);
+        } else {
+            callback(null, results);
+        }
+    });
+}
+
+function getPorcentajeAsistencia(materiaId, callback) {
+    const query = `
+    SELECT a.estado, COUNT(a.id_asistencia) AS cantidad
+    FROM Asistencia a
+    JOIN Clase c ON a.Clase_id_clase = c.id_clase
+    WHERE c.Materia_id_materia = ?
+    GROUP BY a.estado;
+    `;
+
+    connection.query(query, [materiaId], (error, results) => {
+        if (error) {
+            callback(error, null);
+        } else {
+            callback(null, results);
+        }
+    });
+}
+function getAsistenciasPorMes(materiaId, callback) {
+    const query = `
+    SELECT DATE_FORMAT(a.fecha, '%Y-%m') AS mes, 
+    SUM(CASE WHEN a.estado = 'presente' THEN 1 ELSE 0 END) AS presentes,
+    SUM(CASE WHEN a.estado = 'ausente' THEN 1 ELSE 0 END) AS ausentes,
+    SUM(CASE WHEN a.estado = 'atraso' THEN 1 ELSE 0 END) AS retrasos
+FROM Asistencia a
+JOIN Clase c ON a.Clase_id_clase = c.id_clase
+WHERE c.Materia_id_materia = ?
+GROUP BY mes
+ORDER BY mes;
+    `;
+
+    connection.query(query, [materiaId], (error, results) => {
+        if (error) {
+            callback(error, null);
+        } else {
+            callback(null, results);
+        }
+    });
+}
+
+function getAsistenciasPorDiaApilado(materiaId, callback) {
+    const query = `
+    SELECT a.fecha,
+    SUM(CASE WHEN a.estado = 'presente' THEN 1 ELSE 0 END) AS presentes,
+    SUM(CASE WHEN a.estado = 'ausente' THEN 1 ELSE 0 END) AS ausentes,
+    SUM(CASE WHEN a.estado = 'atraso' THEN 1 ELSE 0 END) AS retrasos
+FROM Asistencia a
+JOIN Clase c ON a.Clase_id_clase = c.id_clase
+WHERE c.Materia_id_materia = ?
+GROUP BY a.fecha
+ORDER BY a.fecha;
+    `;
+
+    connection.query(query, [materiaId], (error, results) => {
+        if (error) {
+            callback(error, null);
+        } else {
+            callback(null, results);
+        }
+    });
+}
 
 module.exports = {
     getEstudiantesByMateria: getEstudiantesByMateria,
@@ -187,5 +286,10 @@ module.exports = {
     getAsistencias: getAsistencias,
     getFaltas: getFaltas,
     getRetrasos: getRetrasos,
-    getEstudiante: getEstudiante
+    getEstudiante: getEstudiante,
+    getAsistenciasPorEstudiante:getAsistenciasPorEstudiante,
+    getTendenciaAsistencia:getTendenciaAsistencia,
+    getPorcentajeAsistencia:getPorcentajeAsistencia,
+    getAsistenciasPorMes:getAsistenciasPorMes,
+    getAsistenciasPorDiaApilado:getAsistenciasPorDiaApilado
 };

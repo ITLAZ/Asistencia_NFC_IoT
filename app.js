@@ -186,7 +186,79 @@ app.get('/estudiante/:estudianteId/faltas/:materiaId', (req, res) => {
     });
 });
 
+app.get('/dash/asistencia/estudiantes/:materiaId', (req, res) => {
+    const materiaId = req.params.materiaId;
+    estfunc.getAsistenciasPorEstudiante(materiaId, (err, results) => { // Reemplaza 1 con el ID de tu materia
+        if (err) {
+            res.status(500).json({ error: 'Error fetching data' });
+            return;
+        }
 
+        const labels = results.map(row => `${row.nombre} ${row.apellido}`);
+        const values = results.map(row => row.asistencias);
+        res.json({ labels, values });
+    });
+});
+
+app.get('/dash/asistencia/tendencia/:materiaId', (req, res) => {
+    const materiaId = req.params.materiaId;
+    estfunc.getTendenciaAsistencia(materiaId, (err, results) => { // Reemplaza 1 con el ID de tu materia
+        if (err) {
+            res.status(500).json({ error: 'Error fetching data' });
+            return;
+        }
+
+        const labels = results.map(row => row.fecha);
+        const values = results.map(row => row.asistencias);
+        res.json({ labels, values });
+    });
+});
+
+app.get('/dash/asistencia/porcentaje/:materiaId', (req, res) => {
+    const materiaId = req.params.materiaId;
+    estfunc.getPorcentajeAsistencia(materiaId, (err, results) => { // Reemplaza 1 con el ID de tu materia
+        if (err) {
+            res.status(500).json({ error: 'Error fetching data' });
+            return;
+        }
+
+        const labels = results.map(row => row.estado);
+        const values = results.map(row => row.cantidad);
+        res.json({ labels, values });
+    });
+});
+
+app.get('/dash/asistencia/mes/:materiaId', (req, res) => {
+    const materiaId = req.params.materiaId;
+    estfunc.getAsistenciasPorMes(materiaId, (err, results) => { // Reemplaza 1 con el ID de tu materia
+        if (err) {
+            res.status(500).json({ error: 'Error fetching data' });
+            return;
+        }
+
+        const labels = results.map(row => row.mes);
+        const presentes = results.map(row => row.presentes);
+        const ausentes = results.map(row => row.ausentes);
+        const retrasos = results.map(row => row.retrasos);
+        res.json({ labels, presentes, ausentes, retrasos });
+    });
+});
+
+app.get('/dash/asistencia/dia-apilado/:materiaId', (req, res) => {
+    const materiaId = req.params.materiaId;
+    estfunc.getAsistenciasPorDiaApilado(materiaId, (err, results) => { // Reemplaza 1 con el ID de tu materia
+        if (err) {
+            res.status(500).json({ error: 'Error fetching data' });
+            return;
+        }
+
+        const labels = results.map(row => row.fecha);
+        const presentes = results.map(row => row.presentes);
+        const ausentes = results.map(row => row.ausentes);
+        const retrasos = results.map(row => row.retrasos);
+        res.json({ labels, presentes, ausentes, retrasos });
+    });
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, function() {
