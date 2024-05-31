@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="static/css/detallestudiante.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!--<script src="scripts/grafestudiantes.js"></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <script src="scripts/grafestudiantes.js"></script>
     <script>
         $(document).ready(function () {
             $("#navbar-placeholder").load("navbar.html", function (response, status, xhr) {
@@ -40,16 +40,16 @@
 
             function cargarDatosEstudiante(estudiante) {
                 $('.asistencias-datos-estudiante').html(`
-                    <p><strong>Nombre:</strong> ${estudiante.nombre} ${estudiante.apellido}</p>
-                    <p><strong>Carrera:</strong> ${estudiante.carrera}</p>
-                    <p><strong>C.I:</strong> ${estudiante.ci}</p>
-                    <p><strong>Correo Electrónico:</strong> ${estudiante.correo}</p>
+                    <p style= "font-size: 30px;"><strong>Nombre:</strong> ${estudiante.nombre} ${estudiante.apellido}</p>
+                    <p style="margin: 0;"><strong>Correo Electrónico:</strong> ${estudiante.correo}</p>
+                    <p style="margin: 0;"><strong>Carrera:</strong> ${estudiante.carrera}</p>
+                    <p style="margin: 0;"><strong>C.I:</strong> ${estudiante.ci}</p>
                 `);
             }
 
             function cargarDatosMateria(estudiantes) {
                 $('.asistencias-datos-materia').html(`
-                    <h2>(${estudiantes[0].sigla} - ${estudiantes[0].paralelo}) ${estudiantes[0].asignatura}</h2>
+                    <h2 style="padding-left: 40px; font-size: 30px;" >(${estudiantes[0].sigla} - ${estudiantes[0].paralelo}) ${estudiantes[0].asignatura}</h2>
                 `);
             }
 
@@ -59,9 +59,9 @@
                 let totalRetrasos = 0;
 
                 asistencias.forEach(a => {
-                    if (a.estado === 'Presente') totalAsistencias++;
-                    if (a.estado === 'Ausente') totalFaltas++;
-                    if (a.estado === 'Tarde') totalRetrasos++;
+                    if (a.estado === 'presente') totalAsistencias++;
+                    if (a.estado === 'ausente') totalFaltas++;
+                    if (a.estado === 'atraso') totalRetrasos++;
                 });
 
                 $('.resumen-asistencia').html(`
@@ -84,8 +84,16 @@
                 var filtro = $(this).val();
                 var url = '/estudiante/' + id_estudiante + '/' + filtro + '/' + id_materia;
 
-                if (filtro === 'todos') {
-                    url = '/estudiante/' + id_estudiante + '/asistencias-faltas-retrasos/' + id_materia;
+                if (filtro === 'presente') {
+                    url = '/estudiante/' + id_estudiante + '/asistencias/' + id_materia;
+                }
+
+                else if (filtro === 'atraso') {
+                    url = '/estudiante/' + id_estudiante + '/retrasos/' + id_materia;
+                }
+
+                else if (filtro === 'ausente') {
+                    url = '/estudiante/' + id_estudiante + '/faltas/' + id_materia;
                 }
 
                 $.getJSON(url, function (asistencias) {
@@ -119,17 +127,15 @@
     <div class="asistencias-datos-materia"></div>
     <div class="asistencias-datos-estudiante"></div>
 
-    <h2>Asistencia del Estudiante</h2>
+    <h2 style="padding-left: 40px; font-size: 30px;">ASISTENCIA DEL ESTUDIANTE</h2>
     <div class="resumen-asistencia">
-        <!-- Cuadros resumen de asistencia, faltas y retrasos -->
     </div>
     <div>
-        <label for="filtro-asistencia">Filtrar por: </label>
+        <label style="padding-left: 40px;" for="filtro-asistencia">Filtrar por: </label>
         <select id="filtro-asistencia">
-            <option value="todos">Todos</option>
-            <option value="asistencias">Presente</option>
-            <option value="retrasos">Tarde</option>
-            <option value="faltas">Ausente</option>
+            <option value="presente">Presente</option>
+            <option value="atraso">Tarde</option>
+            <option value="ausente">Ausente</option>
         </select>
     </div>
     
@@ -137,8 +143,8 @@
         <thead>
             <tr>
                 <th>Fecha</th>
-                <th>Entrada</th>
-                <th>Salida</th>
+                <th>Hora de Entrada</th>
+                <th>Hora de Salida</th>
                 <th>Estado</th>
             </tr>
         </thead>
@@ -146,8 +152,24 @@
         </tbody>
     </table>
 
-    <h2>Estadísticas de Asistencia</h2>
-    <canvas id="graficoEstadisticas"></canvas>
+    <h2 style="padding-left: 40px; font-size: 30px;">ESTADÍSTICA DEL ESTUDIANTE</h2>
+
+    <h3 style="text-align: center;">Gráfico de Asistencia a lo Largo del Tiempo</h3>
+    <div class="graficolinea">
+        <canvas id="graficoEstadisticasLine"></canvas>
+    </div>
+    <h3 style="text-align: center;">Distribución de Asistencias</h3>
+    <div class="contenedor-graficos">
+        <div class="graficoBar">
+            <canvas id="graficoEstadisticasBar"></canvas>
+        </div>
+        <div class="grafico">
+            <canvas id="graficoEstadisticasPie"></canvas>
+        </div>
+        <div class="grafico">
+            <canvas id="graficoEstadisticasRadar"></canvas>
+        </div>
+    </div>
 </body>
 </html>
 

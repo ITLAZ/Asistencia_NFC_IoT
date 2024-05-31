@@ -98,7 +98,7 @@ function getAsistencias(estudianteId, materiaId, callback) {
         WHERE
             p.id_persona = ?
             AND m.id_materia = ?
-            AND a.estado = 'Presente'
+            AND a.estado = 'presente'
         ORDER BY
             a.fecha;
         
@@ -132,7 +132,7 @@ function getFaltas(estudianteId, materiaId, callback) {
         WHERE
             p.id_persona = ?
             AND m.id_materia = ?
-            AND a.estado = 'Ausente'
+            AND a.estado = 'ausente'
         ORDER BY
             a.fecha;
         
@@ -165,7 +165,7 @@ function getRetrasos(estudianteId, materiaId, callback) {
         WHERE
             p.id_persona = ?
             AND m.id_materia = ?
-            AND a.estado = 'Tarde'
+            AND a.estado = 'atraso'
         ORDER BY
             a.fecha;
         
