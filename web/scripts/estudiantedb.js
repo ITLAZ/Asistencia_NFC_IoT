@@ -34,7 +34,7 @@ function getEstudiante(estudianteId, materiaId, callback) {
         INNER JOIN Materia_Persona ON Persona.id_persona = Materia_Persona.Persona_id_persona
         INNER JOIN Materia ON Materia_Persona.Materia_id_materia = Materia.id_materia
         INNER JOIN Carrera ON Materia_Persona.Carrera_id_carrera = Carrera.id_carrera
-        WHERE Materia.id_materia = ? AND Persona.id_persona = ?;
+        WHERE Persona.id_persona = ? AND Materia.id_materia = ?;
     `;
 
     connection.query(query, [estudianteId, materiaId], (error, results) => {
