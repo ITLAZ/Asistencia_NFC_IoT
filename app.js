@@ -21,11 +21,18 @@ app.use('/', express.static(path.join(__dirname, 'web')));
 app.use(cors());
 
 var connection = mysql.createConnection({
+    host: 'b7nq9vuk5khbgml2fuci-mysql.services.clever-cloud.com',
+    database: 'b7nq9vuk5khbgml2fuci',
+    user: 'u4g9r0u8rshde3fp',
+    password: 'jRHcgafaYZroFK6Yd9hX'
+});
+
+/*var connection = mysql.createConnection({
     host: 'localhost',
     database: 'db_nfc',
     user: 'root',
     password: ''
-});
+});*/
 
 connection.connect(function(err) {
     if (err) {

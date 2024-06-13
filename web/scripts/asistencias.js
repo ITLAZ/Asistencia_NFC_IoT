@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Seleccionar la primera materia por defecto y cargar asistencias
                 if (data.length > 0) {
-                    materiaSelect.value = data[0].id_materia;
+                    materiaSelect.value = data[1].id_materia;
                     getAsistencias();
                 }
             })
