@@ -28,15 +28,15 @@
             cargarDatos(id_estudiante, id_materia);
 
             function cargarDatos(id_estudiante, id_materia) {
-                $.getJSON('/estudiantes/' + id_materia, function (estudiantes) {
+                $.getJSON('http://localhost:3000/estudiantes/' + id_materia, function (estudiantes) {
                     cargarDatosMateria(estudiantes);
                 });
 
-                $.getJSON('/estudiante/' + id_estudiante + '/est/' + id_materia, function (estudiante) {
+                $.getJSON('http://localhost:3000/estudiante/' + id_estudiante + '/est/' + id_materia, function (estudiante) {
                     cargarDatosEstudiante(estudiante[0]);
                 });
 
-                $.getJSON('/estudiante/' + id_estudiante + '/asistencias-faltas-retrasos/' + id_materia, function (asistencias) {
+                $.getJSON('http://localhost:3000/estudiante/' + id_estudiante + '/asistencias-faltas-retrasos/' + id_materia, function (asistencias) {
                     cargarDatosAsistencia(asistencias);
                     generarGraficoEstadisticas(asistencias);
                 });
@@ -86,18 +86,18 @@
 
             $('#filtro-asistencia').change(function () {
                 var filtro = $(this).val();
-                var url = '/estudiante/' + id_estudiante + '/' + filtro + '/' + id_materia;
+                var url = 'http://localhost:3000/estudiante/' + id_estudiante + '/' + filtro + '/' + id_materia;
 
                 if (filtro === 'presente') {
-                    url = '/estudiante/' + id_estudiante + '/asistencias/' + id_materia;
+                    url = 'http://localhost:3000/estudiante/' + id_estudiante + '/asistencias/' + id_materia;
                 }
 
                 else if (filtro === 'atraso') {
-                    url = '/estudiante/' + id_estudiante + '/retrasos/' + id_materia;
+                    url = 'http://localhost:3000/estudiante/' + id_estudiante + '/retrasos/' + id_materia;
                 }
 
                 else if (filtro === 'ausente') {
-                    url = '/estudiante/' + id_estudiante + '/faltas/' + id_materia;
+                    url = 'http://localhost:3000/estudiante/' + id_estudiante + '/faltas/' + id_materia;
                 }
 
                 $.getJSON(url, function (asistencias) {

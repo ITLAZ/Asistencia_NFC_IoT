@@ -86,7 +86,7 @@
 
         function fetchMaterias() {
             $.ajax({
-                url: '/materias',
+                url: 'http://localhost:3000/materias',
                 method: 'GET',
                 success: function (data) {
                     data.forEach(materia => {
@@ -120,7 +120,7 @@
 
 
             $.ajax({
-                url: `/dash/asistencia/estudiantes/${materiaId}`,
+                url: `http://localhost:3000/dash/asistencia/estudiantes/${materiaId}`,
                 method: 'GET',
                 success: function (data) {
                     charts['chart1'] = crearGraficoDeBarras('chart1', 'Asistencia por Estudiante', data.labels, data.values);
@@ -131,7 +131,7 @@
             });
 
             $.ajax({
-                url: `/dash/asistencia/tendencia/${materiaId}`,
+                url: `http://localhost:3000/dash/asistencia/tendencia/${materiaId}`,
                 method: 'GET',
                 success: function (data) {
                     charts['chart2'] = crearGraficoDeLineas('chart2', 'Tendencia de Asistencia Diaria', data.labels, data.values);
@@ -142,7 +142,7 @@
             });
 
             $.ajax({
-                url: `/dash/asistencia/porcentaje/${materiaId}`,
+                url: `http://localhost:3000/dash/asistencia/porcentaje/${materiaId}`,
                 method: 'GET',
                 success: function (data) {
                     charts['chart3'] = crearGraficoCircular('chart3', 'Porcentaje de Asistencia', data.labels, data.values);
@@ -153,7 +153,7 @@
             });
 
             $.ajax({
-                url: `/dash/asistencia/mes/${materiaId}`,
+                url: `http://localhost:3000/dash/asistencia/mes/${materiaId}`,
                 method: 'GET',
                 success: function (data) {
                     charts['chart4'] = crearGraficoDeBarrasCombinado('chart4', 'Asistencias por Mes', data.labels, data.presentes, data.ausentes, data.retrasos);
@@ -164,7 +164,7 @@
             });
 
             $.ajax({
-                url: `/dash/asistencia/dia-apilado/${materiaId}`,
+                url: `http://localhost:3000/dash/asistencia/dia-apilado/${materiaId}`,
                 method: 'GET',
                 success: function (data) {
                     charts['chart5'] = crearGraficoDeBarrasApilado('chart5', 'Asistencias por Día', data.labels, data.presentes, data.ausentes, data.retrasos);

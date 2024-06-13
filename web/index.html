@@ -9,7 +9,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
-            $("#navbar-placeholder").load("navbar.html", function (response, status, xhr) {
+            $("#navbar-placeholder").load("./navbar.html", function (response, status, xhr) {
                 if (status == "error") {
                     var msg = "There was an error: ";
                     $("#navbar-placeholder").html(msg + xhr.status + " " + xhr.statusText);
@@ -18,7 +18,7 @@
         });
 
         $(document).ready(function () {
-            $("#footer-placeholder").load("footer.html", function (response, status, xhr) {
+            $("#footer-placeholder").load("./footer.html", function (response, status, xhr) {
                 if (status == "error") {
                     var msg = "There was an error: ";
                     $("#footer-placeholder").html(msg + xhr.status + " " + xhr.statusText);
@@ -46,7 +46,7 @@
                 <span>Estudiantes</span>
             </div>
             <div class="option">
-                <a href="dashboard.html">
+                <a href="./dashboard.html">
                     <i class="fas fa-chart-line"></i>
                 </a>
                 <span>Reporte de la Materia</span>

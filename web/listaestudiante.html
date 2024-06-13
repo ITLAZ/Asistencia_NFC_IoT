@@ -20,7 +20,7 @@
             });
 
             function cargarEstudiantes(id_materia) {
-                $.getJSON('/estudiantes/' + id_materia, function (data) { 
+                $.getJSON('http://localhost:3000/estudiantes/' + id_materia, function (data) {
                     $('.estudiantes-lista').empty();
                     data.forEach(function (estudiante) {
                         var html = '<div class="estudiante">';
@@ -37,7 +37,7 @@
 
             function fetchMaterias() {
                 $.ajax({
-                    url: '/materias',
+                    url: 'http://localhost:3000/materias',
                     method: 'GET',
                     success: function (data) {
                         data.forEach(materia => {

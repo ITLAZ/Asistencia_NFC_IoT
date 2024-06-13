@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const estadoSelect = document.getElementById('estado');
 
     function fetchMaterias() {
-        fetch('/materias')
+        fetch('http://localhost:3000/materias')
             .then(response => response.json())
             .then(data => {
                 data.forEach(materia => {
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Seleccionar la primera materia por defecto y cargar asistencias
                 if (data.length > 0) {
-                    materiaSelect.value = data[0].id_materia;
+                    materiaSelect.value = data[1].id_materia;
                     getAsistencias();
                 }
             })
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        let url = `/asistencias/${materiaId}/${fecha}`;
+        let url = `http://localhost:3000/asistencias/${materiaId}/${fecha}`;
         if (estado) {
             url += `/${estado}`;
         }
